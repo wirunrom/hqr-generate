@@ -28,5 +28,5 @@ const src = await qr_png_data_url(
 );
 
 // Example:
-// <img src={src} alt="QR Code" />
+<img src={src} alt="QR Code" />
 ```

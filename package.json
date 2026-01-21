@@ -1,5 +1,5 @@
 {
-  "name": "hqr-generate",
+  "name": "@heart569522/hqr-generate",
   "version": "0.1.13",
   "description": "Stable black/white QR code generator (PNG data URL) powered by Rust + WASM",
   "type": "module",

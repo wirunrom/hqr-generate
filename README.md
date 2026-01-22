@@ -55,6 +55,7 @@ const url = URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
 ## React Hook Helper
 
 **useQrPngDataUrl**
+
 A React hook that generates a PNG Data URL and updates automatically when inputs change.
 
 ```ts
@@ -73,6 +74,7 @@ function QR() {
 ```
 
 **useQrPngBlobUrl**
+
 A React hook that generates a Blob URL and updates automatically when inputs change.
 
 ```ts
@@ -92,19 +94,7 @@ function QR() {
 
 ## API Reference
 
-**qr_png_data_url(text, size?, margin?, ecc?)**
 Generate a QR code and return a PNG Data URL.
-
-| Name   | Type                       | Default | Description                  |
-| ------ | -------------------------- | ------- | ---------------------------- |
-| text   | `string`                   | —       | Text to encode               |
-| size   | `number`                   | `320`   | Image size in pixels         |
-| margin | `number`                   | `4`     | Quiet zone (recommended ≥ 4) |
-| ecc    | `"L" \| "M" \| "Q" \| "H"` | `"Q"`   | Error correction level       |
-
-**qr_png_bytes(text, size?, margin?, ecc?)**
-Generate a QR code and return PNG raw bytes (Uint8Array).
-This is the fastest and most memory-efficient option.
 
 | Name   | Type                       | Default | Description                  |
 | ------ | -------------------------- | ------- | ---------------------------- |

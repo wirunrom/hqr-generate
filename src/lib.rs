@@ -45,20 +45,39 @@ fn qr_png_bytes_inner(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Vec
         }
     }
 
-    let mut out = Vec::new();
+    let final_size = size;
+    let final_pixels = if img_size == final_size {
+        pixels
+    } else {
+        let mut out = vec![255u8; (final_size * final_size) as usize];
+        let offset = (final_size - img_size) / 2;
+
+        for y in 0..img_size {
+            let src_row = (y * img_size) as usize;
+            let dst_row = ((y + offset) * final_size + offset) as usize;
+
+            out[dst_row..dst_row + img_size as usize]
+                .copy_from_slice(&pixels[src_row..src_row + img_size as usize]);
+        }
+
+        out
+    };
+
+    let mut out_png = Vec::new();
     {
-        let mut encoder = png::Encoder::new(&mut out, img_size, img_size);
+        let mut encoder = png::Encoder::new(&mut out_png, final_size, final_size);
         encoder.set_color(png::ColorType::Grayscale);
         encoder.set_depth(png::BitDepth::Eight);
+
         let mut writer = encoder
             .write_header()
             .map_err(|e| JsValue::from_str(&format!("PNG header error: {e}")))?;
         writer
-            .write_image_data(&pixels)
+            .write_image_data(&final_pixels)
             .map_err(|e| JsValue::from_str(&format!("PNG data error: {e}")))?;
     }
 
-    Ok(out)
+    Ok(out_png)
 }
 
 #[wasm_bindgen]

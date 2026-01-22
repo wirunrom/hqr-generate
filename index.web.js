@@ -5,6 +5,19 @@ import init, {
 
 let _initPromise;
 
+function eccToU8(ecc) {
+  switch (ecc) {
+    case "L":
+      return 0;
+    case "M":
+      return 1;
+    case "H":
+      return 3;
+    default:
+      return 2;
+  }
+}
+
 /** @returns {Promise<void>} */
 async function ensureInit() {
   if (!_initPromise) _initPromise = init();
@@ -20,10 +33,10 @@ async function ensureInit() {
  */
 export async function qr_png_data_url(text, size = 320, margin = 4, ecc = "Q") {
   await ensureInit();
-  return _qr_png_data_url(text, size, margin, ecc);
+  return _qr_png_data_url(text, size, margin, eccToU8(ecc));
 }
 
 export async function qr_png_bytes(text, size = 320, margin = 4, ecc = "Q") {
   await ensureInit();
-  return _qr_png_bytes(text, size, margin, ecc);
+  return _qr_png_bytes(text, size, margin, eccToU8(ecc));
 }

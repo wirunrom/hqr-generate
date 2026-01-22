@@ -1,4 +1,4 @@
-export type QrEcc = "L" | "M" | "Q" | "H";
+import type { QrEcc } from "../index";
 
 export interface UseQrPngOptions {
   size?: number;

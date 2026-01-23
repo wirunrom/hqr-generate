@@ -14,9 +14,8 @@ fn ecc_from_u8(ecc: u8) -> EcLevel {
     }
 }
 
-fn qr_png_bytes_inner(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Vec<u8>, JsValue> {
+pub fn qr_png_bytes_inner(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Vec<u8>, JsValue> {
     let size = size.max(128);
-    let margin = margin.max(4);
 
     let code = QrCode::with_error_correction_level(text.as_bytes(), ecc_from_u8(ecc))
         .map_err(|e| JsValue::from_str(&format!("QR error: {e}")))?;

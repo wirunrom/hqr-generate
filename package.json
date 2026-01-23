@@ -1,27 +1,28 @@
 {
   "name": "@wirunrom/hqr-generate",
-  "version": "0.2.21",
+  "version": "0.2.22",
   "description": "Stable black/white QR code generator (PNG data URL) powered by Rust + WASM",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wirunrom/hqr-generate.git"
+  },
+  "homepage": "https://github.com/wirunrom/hqr-generate#readme",
   "files": [
     "pkg/**",
     "index.web.js",
     "index.bundler.js",
     "index.d.ts",
     "react/**",
-    "bundler/**",
     "README.md",
     "LICENSE"
   ],
-  "main": "./index.web.js",
-  "module": "./index.web.js",
   "types": "./index.d.ts",
+  "main": "./index.bundler.js",
+  "module": "./index.bundler.js",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "default": "./index.web.js"
-    },
-    "./bundler": {
       "types": "./index.d.ts",
       "default": "./index.bundler.js"
     },
@@ -29,14 +30,18 @@
       "types": "./react/index.d.ts",
       "default": "./react/index.js"
     },
-    "./bundler/react": {
-      "types": "./bundler/react.d.ts",
-      "default": "./bundler/react.js"
+    "./web": {
+      "types": "./index.d.ts",
+      "default": "./index.web.js"
     }
   },
   "peerDependencies": {
-    "react": ">=17",
-    "react-dom": ">=17"
+    "react": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "scripts": {
     "clean": "rm -rf pkg",
@@ -50,8 +55,10 @@
   "keywords": [
     "qrcode",
     "qr",
+    "rust",
     "wasm",
-    "rust"
-  ],
-  "license": "MIT"
+    "react",
+    "png",
+    "performance"
+  ]
 }

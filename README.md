@@ -1,6 +1,6 @@
 # @wirunrom/hqr-generate
 
-A **stable black-and-white QR Code generator** that returns a **PNG Data URL or PNG bytes**, powered by **Rust + WebAssembly (WASM)**.
+A **stable black-and-white QR Code generator** that returns **PNG Data URLs or PNG bytes**, powered by **Rust + WebAssembly (WASM)**.
 
 This library is designed with a **scan-reliability-first** mindset and a **frontend-first API**, making it easy to use in modern web applications without additional configuration.
 
@@ -12,11 +12,11 @@ This library is designed with a **scan-reliability-first** mindset and a **front
 - Optimized for both **old and new mobile devices**
 - Deterministic and consistent QR output
 - Lightweight and fast (**Rust + WASM**)
-- Supports both:
+- Supports:
   - **PNG Data URL** (simple usage)
-  - **PNG raw bytes** (best performance)
+  - **PNG raw bytes** (best performance, no Base64 overhead)
 - Works out of the box with:
-  - Plain HTML
+  - Plain HTML / JavaScript
   - React
   - Next.js (Pages Router & App Router)
   - Modern bundlers (Vite, Webpack, etc.)
@@ -29,34 +29,52 @@ This library is designed with a **scan-reliability-first** mindset and a **front
 npm install @wirunrom/hqr-generate
 ```
 
-## Basic Usage (Browser / React / Next.js)
+## Basic Usage (Bundler / React / Next.js)
 
-Generate PNG Data URL (simple & compatible)
+**Generate PNG Data URL**
+
+Simple and widely compatible. Recommended for most use cases.
 
 ```ts
-import { qr_png_data_url } from "@wirunrom/hqr-generate";
+import { qrPngDataUrl } from "@wirunrom/hqr-generate";
 
-const src = await qr_png_data_url("hello", 320, 4, "Q");
+const src = await qrPngDataUrl("hello world", {
+  size: 320,
+  margin: 4,
+  ecc: "Q",
+});
+
 <img src={src} alt="QR Code" />
 ```
 
-Generate PNG Bytes
+**Generate PNG Bytes (Best Performance)**
+
 Using raw bytes avoids Base64 overhead and is more memory-efficient.
 
 ```ts
-import { qr_png_bytes } from "@wirunrom/hqr-generate";
+import { qrPngBytes } from "@wirunrom/hqr-generate";
 
-const bytes = await qr_png_bytes("hello", 320, 4, "Q");
-const url = URL.createObjectURL(new Blob([bytes], { type: "image/png" }));
+const bytes = await qrPngBytes("hello world", {
+  size: 320,
+  margin: 4,
+  ecc: "Q",
+});
+
+const url = URL.createObjectURL(
+  new Blob([bytes], { type: "image/png" })
+);
 
 <img src={url} alt="QR Code" />
+
 ```
 
-## React Hook Helper
+## React Hook Helper (/react)
+
+For React or Next.js applications, the library provides idiomatic React hooks that automatically update when inputs change.
 
 **useQrPngDataUrl**
 
-A React hook that generates a PNG Data URL and updates automatically when inputs change.
+Generates a PNG Data URL and updates automatically when dependencies change.
 
 ```ts
 import { useQrPngDataUrl } from "@wirunrom/hqr-generate/react";
@@ -75,7 +93,8 @@ function QR() {
 
 **useQrPngBlobUrl**
 
-A React hook that generates a Blob URL and updates automatically when inputs change.
+Generates a Blob URL instead of a Base64 Data URL.
+Recommended for larger QR codes or frequent updates.
 
 ```ts
 import { useQrPngBlobUrl } from "@wirunrom/hqr-generate/react";
@@ -90,6 +109,34 @@ function QR() {
   if (!src) return null;
   return <img src={src} alt="QR Code" />;
 }
+```
+
+## Plain HTML / No Bundler (/web)
+
+Use this entry when working with static HTML, CDN, or environments without a bundler.
+
+```html
+<script type="module">
+  import { qr_png_bytes, qr_png_data_url } from "@wirunrom/hqr-generate/web";
+
+  const src = await qr_png_bytes("hello world", {
+    size: 320,
+    margin: 4,
+    ecc: "Q",
+  });
+
+  // or
+
+  const src = await qr_png_data_url("hello world", {
+    size: 320,
+    margin: 4,
+    ecc: "Q",
+  });
+
+  document.getElementById("qr").src = src;
+</script>
+
+<img id="qr" />
 ```
 
 ## API Reference

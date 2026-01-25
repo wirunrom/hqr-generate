@@ -55,7 +55,7 @@ export async function qr_png_bytes(text, size = 320, margin = 4, ecc = "Q") {
  * @param {ImageData} image
  * @returns {Promise<string>}
  */
-export async function qr_decode_from_image(image) {
+export async function qr_decode_from_image_data(image) {
   await ensureInit();
   return _qr_decode_from_rgba(image.width, image.height, image.data);
 }

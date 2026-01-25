@@ -22,7 +22,7 @@ This library is designed with a **scan-reliability-first** mindset and a **front
 - Works out of the box with:
   - Plain HTML / JavaScript
   - React
-  - Next.js (Pages Router & App Router)
+  - Next.js Client Component (Pages Router & App Router)
   - Modern bundlers (Vite, Webpack, etc.)
 
 ---
@@ -33,7 +33,20 @@ This library is designed with a **scan-reliability-first** mindset and a **front
 npm install @wirunrom/hqr-generate
 ```
 
-## Basic Usage (Bundler / React / Next.js)
+## API Reference (GenerateQR)
+
+Generate a QR code and return a PNG Data URL.
+
+Parameters
+
+| Name   | Type                       | Default | Description                  |
+| ------ | -------------------------- | ------- | ---------------------------- |
+| text   | `string`                   | —       | Text to encode               |
+| size   | `number`                   | `320`   | Image size in pixels         |
+| margin | `number`                   | `4`     | Quiet zone (recommended ≥ 4) |
+| ecc    | `"L" \| "M" \| "Q" \| "H"` | `"Q"`   | Error correction level       |
+
+## Basic Usage [Bundler / React / Next.js (Client)]
 
 **Generate PNG Data URL**
 
@@ -121,15 +134,15 @@ function QR() {
 }
 ```
 
-**useQrDecodeFromImage**
+**useQrDecodeFromImageData**
 
 Decode a QR code from browser ImageData.
 
 ```ts
-import { useQrDecodeFromImage } from "@wirunrom/hqr-generate/react";
+import { useQrDecodeFromImageData } from "@wirunrom/hqr-generate/react";
 
 function Scanner({ image }: { image: ImageData | null }) {
-  const { text, loading, error } = useQrDecodeFromImage(image);
+  const { text, loading, error } = useQrDecodeFromImageData(image);
 
   if (loading) return <div>Scanning…</div>;
   if (error) return <div>Error</div>;
@@ -139,55 +152,6 @@ function Scanner({ image }: { image: ImageData | null }) {
 }
 ```
 
-## Plain HTML / No Bundler (/web)
-
-Use this entry when working with static HTML, CDN, or environments without a bundler.
-
-```html
-<script type="module">
-  import {
-    qr_png_bytes,
-    qr_png_data_url,
-    qr_decode_from_image,
-  } from "@wirunrom/hqr-generate/web";
-
-  const src = await qr_png_data_url("hello world", 320, 4, "Q");
-  document.getElementById("qr").src = src;
-
-  // decode example (canvas)
-  const canvas = document.getElementById("c");
-  const ctx = canvas.getContext("2d");
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  const text = await qr_decode_from_image(imageData);
-  console.log(text);
-</script>
-
-<img id="qr" />
-<canvas id="c" hidden></canvas>
-```
-
-## API Reference
-
-**GenerateQR**
-
-Generate a QR code and return a PNG Data URL.
-
-Parameters
-
-| Name   | Type                       | Default | Description                  |
-| ------ | -------------------------- | ------- | ---------------------------- |
-| text   | `string`                   | —       | Text to encode               |
-| size   | `number`                   | `320`   | Image size in pixels         |
-| margin | `number`                   | `4`     | Quiet zone (recommended ≥ 4) |
-| ecc    | `"L" \| "M" \| "Q" \| "H"` | `"Q"`   | Error correction level       |
-
-**DecodeQR**
-
-Decode a QR code from browser ImageData.
-
-This is the recommended decode API for web, camera, canvas, and image upload workflows.
-
 Parameters
 
 | Name  | Type        | Description                                 |
@@ -196,7 +160,7 @@ Parameters
 
 Returns
 
-- `ts Promise<string>`
+- `Promise<string>`
   - Resolves with decoded QR text
   - Rejects if no QR code is detected or image is invalid
 
@@ -209,3 +173,58 @@ Notes
   - High-contrast QR codes
   - Minimal blur
   - Proper quiet zone
+
+**useQrDecodeFromImageSrc**
+
+Decode a QR code from your image path.
+
+```ts
+import { useQrDecodeFromImageSrc } from "@wirunrom/hqr-generate/react";
+
+function DecodeQR({ imagePath }: { imagePath: string | null }) {
+  const { text } = useQrDecodeFromImageSrc(imagePath);
+
+  if (!text) return null;
+
+  return <div>Decode QR: {text}</div>;
+}
+```
+
+Parameters
+
+| Name | Type     | Description     |
+| ---- | -------- | --------------- |
+| src  | `string` | Your image path |
+
+Returns
+
+- `Promise<string>`
+  - Resolves with decoded QR text
+
+## Plain HTML / No Bundler (/web)
+
+Use this entry when working with static HTML, CDN, or environments without a bundler.
+
+```html
+<script type="module">
+  import {
+    qr_png_bytes,
+    qr_png_data_url,
+    qr_decode_from_image_data,
+  } from "@wirunrom/hqr-generate/web";
+
+  const src = await qr_png_data_url("hello world", 320, 4, "Q");
+  document.getElementById("qr").src = src;
+
+  // decode example (canvas)
+  const canvas = document.getElementById("c");
+  const ctx = canvas.getContext("2d");
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  const text = await qr_decode_from_image_data(imageData);
+  console.log(text);
+</script>
+
+<img id="qr" />
+<canvas id="c" hidden></canvas>
+```

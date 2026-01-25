@@ -22,7 +22,7 @@ export declare function useQrPngBlobUrl(
   opts?: UseQrPngOptions
 ): string;
 
-export declare function useQrDecodeFromImage(
+export declare function useQrDecodeFromImageData(
   image: ImageData | null
 ): {
   text: string | null;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   qr_png_data_url,
   qr_png_bytes,
-  qr_decode_from_image,
+  qr_decode_from_image_data,
 } from "../index.bundler.js";
 
 export function useQrPngDataUrl(text, opts) {
@@ -76,7 +76,7 @@ export function useQrPngBlobUrl(text, opts) {
   return src;
 }
 
-export function useQrDecodeFromImage(image) {
+export function useQrDecodeFromImageData(image) {
   const [text, setText] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -94,7 +94,7 @@ export function useQrDecodeFromImage(image) {
     setLoading(true);
     setError(null);
 
-    qr_decode_from_image(image)
+    qr_decode_from_image_data(image)
       .then((res) => {
         if (!alive) return;
         setText(res);

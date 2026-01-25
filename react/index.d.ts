@@ -16,10 +16,19 @@ export declare function useQrPngBlobUrl(
   opts?: UseQrPngOptions
 ): string;
 
-export declare function useQrDecodeFromImage(
+export declare function useQrDecodeFromImageData(
   image: ImageData | null
 ): {
   text: string | null;
   error: unknown | null;
   loading: boolean;
+};
+
+export declare function useQrDecodeFromImageSrc(
+  src: string | null
+): {
+  text: string | null;
+  loading: boolean;
+  error: unknown | null;
+  loadError: unknown | null;
 };

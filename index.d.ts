@@ -24,6 +24,6 @@ export declare function qr_png_bytes(
 /**
  * Decode QR from browser ImageData
  */
-export function qr_decode_from_image(
+export function qr_decode_from_image_data(
   image: ImageData
 ): Promise<string>;

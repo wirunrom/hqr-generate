@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQrDecodeFromImageData } from "./useQrDecodeFromImageData";
+import { useQrDecodeFromImageData } from "./useQrDecodeFromImageData.js";
 
 async function loadImageData(src) {
   const img = new Image();

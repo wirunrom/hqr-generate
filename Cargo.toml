@@ -1,6 +1,6 @@
 [package]
 name = "hqr-generate"
-version = "0.3.0"
+version = "0.3.11"
 edition = "2024"
 description = "Stable black/white QR code generator (PNG data URL) powered by Rust + WASM"
 license = "MIT"

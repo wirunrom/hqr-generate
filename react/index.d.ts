@@ -6,29 +6,7 @@ export interface UseQrPngOptions {
   ecc?: QrEcc;
 }
 
-export declare function useQrPngDataUrl(
-  text: string,
-  opts?: UseQrPngOptions
-): string;
-
-export declare function useQrPngBlobUrl(
-  text: string,
-  opts?: UseQrPngOptions
-): string;
-
-export declare function useQrDecodeFromImageData(
-  image: ImageData | null
-): {
-  text: string | null;
-  error: unknown | null;
-  loading: boolean;
-};
-
-export declare function useQrDecodeFromImageSrc(
-  src: string | null
-): {
-  text: string | null;
-  loading: boolean;
-  error: unknown | null;
-  loadError: unknown | null;
-};
+export * from "./useQrPngDataUrl";
+export * from "./useQrPngBlobUrl";
+export * from "./useQrDecodeFromImageData";
+export * from "./useQrDecodeFromImageSrc";

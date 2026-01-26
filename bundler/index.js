@@ -4,7 +4,7 @@ import init, {
   generate_jpg as _generate_jpg,
   generate_webp as _generate_webp,
   decode as _decode,
-} from "./pkg/bundler/hqr_generate.js";
+} from "../pkg/bundler/hqr_generate.js";
 
 let _initPromise;
 
@@ -15,13 +15,7 @@ async function ensureInit() {
 }
 
 /**
- * @param {string} text
- * @param {{
- *   size?: number,
- *   margin?: number,
- *   ecc?: "L" | "M" | "Q" | "H"
- * }} [opts]
- * @returns {Promise<Uint8Array>}
+ * Default generator (PNG)
  */
 export async function generate(text, opts) {
   await ensureInit();
@@ -50,8 +44,6 @@ export async function generate_webp(text, opts) {
 
 /**
  * Decode QR
- * - ImageData (browser)
- * - Uint8Array (bundler env)
  */
 export async function decode(input) {
   await ensureInit();

@@ -1,38 +1,112 @@
 #![cfg(feature = "wasm")]
 
 use js_sys::Uint8Array;
+use wasm_bindgen::JsCast;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::*;
 
-use base64::{Engine as _, engine::general_purpose::STANDARD};
+#[cfg(feature = "decode")]
+use js_sys::Reflect;
 
-use crate::generate::qr_png_bytes_inner;
+use crate::core::generate::generate_qr_bitmap;
+use crate::render::png::render_png;
+use crate::render::svg::render_svg;
 
 #[cfg(feature = "decode")]
-use crate::decode::decode_from_rgba;
+use crate::core::decode::decode as core_decode;
+
+#[cfg(feature = "decode")]
+use crate::core::types::DecodeInput;
+
+// ---------- helpers ----------
+
+#[inline]
+fn js_err<E: core::fmt::Debug>(e: E) -> JsValue {
+    JsValue::from_str(&format!("{e:?}"))
+}
+
+// ---------- generate (default = png bytes) ----------
 
 #[wasm_bindgen]
-pub fn qr_png_bytes(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Uint8Array, JsValue> {
-    let png = qr_png_bytes_inner(text, size, margin, ecc)
-        .map_err(|e| JsValue::from_str(&format!("{:?}", e)))?;
-
-    Ok(Uint8Array::from(png.as_slice()))
+pub fn generate(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Uint8Array, JsValue> {
+    let bitmap = generate_qr_bitmap(text, size, margin, ecc).map_err(js_err)?;
+    let bytes = render_png(&bitmap).map_err(js_err)?;
+    Ok(Uint8Array::from(bytes.as_slice()))
 }
 
 #[wasm_bindgen]
-pub fn qr_png_data_url(text: &str, size: u32, margin: u32, ecc: u8) -> Result<String, JsValue> {
-    let png = qr_png_bytes_inner(text, size, margin, ecc)
-        .map_err(|e| JsValue::from_str(&format!("{:?}", e)))?;
-
-    Ok(format!("data:image/png;base64,{}", STANDARD.encode(png)))
+pub fn generate_png(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Uint8Array, JsValue> {
+    generate(text, size, margin, ecc)
 }
+
+#[wasm_bindgen]
+pub fn generate_svg(text: &str, size: u32, margin: u32, ecc: u8) -> Result<String, JsValue> {
+    let bitmap = generate_qr_bitmap(text, size, margin, ecc).map_err(js_err)?;
+    Ok(render_svg(&bitmap))
+}
+
+// ---------- generate (jpg/webp) ----------
+
+#[cfg(feature = "render-image")]
+#[wasm_bindgen]
+pub fn generate_jpg(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Uint8Array, JsValue> {
+    use crate::render::jpg::render_jpg;
+
+    let bitmap = generate_qr_bitmap(text, size, margin, ecc).map_err(js_err)?;
+    let bytes = render_jpg(&bitmap).map_err(js_err)?;
+    Ok(Uint8Array::from(bytes.as_slice()))
+}
+
+#[cfg(feature = "render-image")]
+#[wasm_bindgen]
+pub fn generate_webp(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Uint8Array, JsValue> {
+    use crate::render::webp::render_webp;
+
+    let bitmap = generate_qr_bitmap(text, size, margin, ecc).map_err(js_err)?;
+    let bytes = render_webp(&bitmap).map_err(js_err)?;
+    Ok(Uint8Array::from(bytes.as_slice()))
+}
+
+// ---------- decode (Uint8Array | ImageData) ----------
+// JS side:
+//   decode(u8arrayBytes)
+//   decode(imageData)
 
 #[cfg(feature = "decode")]
 #[wasm_bindgen]
-pub fn qr_decode_from_rgba(width: u32, height: u32, rgba: Uint8Array) -> Result<String, JsValue> {
-    let rgba = rgba.to_vec();
+pub fn decode(input: JsValue) -> Result<String, JsValue> {
+    // Case 1: Uint8Array (encoded image bytes: PNG/JPG/WEBP/...)
+    if input.is_instance_of::<Uint8Array>() {
+        let bytes = Uint8Array::new(&input).to_vec();
+        let result = core_decode(DecodeInput::ImageBytes(&bytes)).map_err(js_err)?;
+        return Ok(result.text);
+    }
 
-    decode_from_rgba(width, height, &rgba)
-        .map(|r| r.text)
-        .map_err(|e| JsValue::from_str(&format!("{:?}", e)))
+    // Case 2: ImageData-like object { width, height, data }
+    // In browsers, ImageData has: width, height, data (Uint8ClampedArray)
+    let width = Reflect::get(&input, &JsValue::from_str("width"))
+        .map_err(js_err)?
+        .as_f64()
+        .ok_or_else(|| JsValue::from_str("decode: invalid ImageData.width"))?
+        as u32;
+
+    let height = Reflect::get(&input, &JsValue::from_str("height"))
+        .map_err(js_err)?
+        .as_f64()
+        .ok_or_else(|| JsValue::from_str("decode: invalid ImageData.height"))?
+        as u32;
+
+    let data = Reflect::get(&input, &JsValue::from_str("data")).map_err(js_err)?;
+
+    // ImageData.data is Uint8ClampedArray, but Uint8Array::new works (views same buffer)
+    let rgba = Uint8Array::new(&data).to_vec();
+
+    let result = core_decode(DecodeInput::Rgba {
+        width,
+        height,
+        data: &rgba,
+    })
+    .map_err(js_err)?;
+
+    Ok(result.text)
 }

@@ -1,6 +1,6 @@
 {
   "name": "@wirunrom/hqr-generate",
-  "version": "0.3.11",
+  "version": "0.4.0",
   "description": "High-performance QR code generator and decoder powered by Rust + WASM",
   "license": "MIT",
   "type": "module",
@@ -10,21 +10,28 @@
   },
   "homepage": "https://github.com/wirunrom/hqr-generate#readme",
   "files": [
-    "pkg/**",
+    "pkg/**/hqr_generate*.js",
+    "pkg/**/hqr_generate*.wasm",
+    "pkg/**/hqr_generate*.d.ts",
+    "index.node.js",
     "index.web.js",
     "index.bundler.js",
     "index.d.ts",
     "react/**",
-    "README.md",
-    "LICENSE"
+    "LICENSE",
+    "README.md"
   ],
   "types": "./index.d.ts",
-  "main": "./index.bundler.js",
-  "module": "./index.bundler.js",
+  "main": "./index.node.js",
+  "module": "./index.web.js",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "default": "./index.bundler.js"
+      "import": "./index.web.js",
+      "require": "./index.node.js",
+      "browser": "./index.web.js",
+      "node": "./index.node.js",
+      "default": "./index.web.js"
     },
     "./react": {
       "types": "./react/index.d.ts",
@@ -45,10 +52,14 @@
   },
   "scripts": {
     "clean": "rm -rf pkg",
+    "build:react": "tsc -p tsconfig.react.json",
     "build:web": "wasm-pack build --target web --out-dir pkg/web -- --features wasm,decode",
     "build:bundler": "wasm-pack build --target bundler --out-dir pkg/bundler -- --features wasm,decode",
-    "build": "npm run build:web && npm run build:bundler",
-    "prepack": "npm run clean && npm run build && rm -f pkg/web/.gitignore pkg/bundler/.gitignore",
+    "build:node": "wasm-pack build --target nodejs --out-dir pkg/nodejs -- --features wasm,decode,render-image",
+    "build": "npm run build:web && npm run build:bundler && npm run build:node && npm run build:react",
+    "prepack": "npm run clean && npm run build && rm -f pkg/**/README.md pkg/**/LICENSE pkg/**/package.json",
+    "release:test": "npm version prerelease --preid=next && npm run publish:test",
+    "publish:test": "npm publish --tag next --access public",
     "publish:npm": "npm publish --registry=https://registry.npmjs.org --access public",
     "publish:github": "npm publish --registry=https://npm.pkg.github.com --userconfig .npmrc.github --access public"
   },
@@ -62,5 +73,10 @@
     "react",
     "png",
     "performance"
-  ]
+  ],
+  "devDependencies": {
+    "@types/react": "^19.2.9",
+    "react": "^19.2.4",
+    "typescript": "^5.9.3"
+  }
 }

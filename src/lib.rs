@@ -1,10 +1,25 @@
-// ---- Core ----
+// Core QR logic (no I/O, no WASM)
+pub mod core;
+
 pub mod error;
-pub mod generate;
 
-// ---- Optional features ----
+// Render QR bitmap into concrete formats (png/svg/...)
+pub mod render;
+
+pub use core::generate::generate_qr_bitmap;
+
+pub use render::png::render_png;
+pub use render::svg::render_svg;
+
+#[cfg(feature = "render-image")]
+pub use render::jpg::render_jpg;
+
+#[cfg(feature = "render-image")]
+pub use render::webp::render_webp;
+
 #[cfg(feature = "decode")]
-pub mod decode;
+pub use core::decode;
 
+// WASM bindings (JS-friendly API)
 #[cfg(feature = "wasm")]
 pub mod wasm;

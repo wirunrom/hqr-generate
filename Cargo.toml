@@ -1,6 +1,6 @@
 [package]
 name = "hqr-generate"
-version = "0.3.11"
+version = "0.4.0"
 edition = "2024"
 description = "Stable black/white QR code generator (PNG data URL) powered by Rust + WASM"
 license = "MIT"
@@ -13,6 +13,8 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 default = ["generate"]
+render-image = ["dep:image"]
+
 generate = []
 decode = ["dep:image", "dep:rqrr"]
 wasm = ["dep:wasm-bindgen", "dep:js-sys", "dep:base64"]

@@ -1,23 +1,12 @@
 import init, {
-  qr_png_data_url as _qr_png_data_url,
-  qr_png_bytes as _qr_png_bytes,
-  qr_decode_from_rgba as _qr_decode_from_rgba,
+  generate_png as _generate_png,
+  generate_svg as _generate_svg,
+  generate_jpg as _generate_jpg,
+  generate_webp as _generate_webp,
+  decode as _decode,
 } from "./pkg/web/hqr_generate.js";
 
 let _initPromise;
-
-function eccToU8(ecc) {
-  switch (ecc) {
-    case "L":
-      return 0;
-    case "M":
-      return 1;
-    case "H":
-      return 3;
-    default:
-      return 2;
-  }
-}
 
 /** @returns {Promise<void>} */
 async function ensureInit() {
@@ -26,36 +15,56 @@ async function ensureInit() {
 }
 
 /**
+ * Default QR generator (PNG, fastest)
+ *
  * @param {string} text
- * @param {number} [size=320]
- * @param {number} [margin=4]
- * @param {"L"|"M"|"Q"|"H"} [ecc="Q"]
- * @returns {Promise<string>}
- */
-export async function qr_png_data_url(text, size = 320, margin = 4, ecc = "Q") {
-  await ensureInit();
-  return _qr_png_data_url(text, size, margin, eccToU8(ecc));
-}
-
-/**
- * @param {string} text
- * @param {number} [size=320]
- * @param {number} [margin=4]
- * @param {"L"|"M"|"Q"|"H"} [ecc="Q"]
+ * @param {object} [opts]
  * @returns {Promise<Uint8Array>}
  */
-export async function qr_png_bytes(text, size = 320, margin = 4, ecc = "Q") {
+export async function generate(text, opts) {
   await ensureInit();
-  return _qr_png_bytes(text, size, margin, eccToU8(ecc));
+  return _generate_png(text, opts);
 }
 
 /**
- * Decode QR from Image (browser/canvas friendly)
+ * Generate QR as PNG
+ */
+export async function generate_png(text, opts) {
+  await ensureInit();
+  return _generate_png(text, opts);
+}
+
+/**
+ * Generate QR as SVG
+ */
+export async function generate_svg(text, opts) {
+  await ensureInit();
+  return _generate_svg(text, opts);
+}
+
+/**
+ * Generate QR as JPG
+ */
+export async function generate_jpg(text, opts) {
+  await ensureInit();
+  return _generate_jpg(text, opts);
+}
+
+/**
+ * Generate QR as WebP
+ */
+export async function generate_webp(text, opts) {
+  await ensureInit();
+  return _generate_webp(text, opts);
+}
+
+/**
+ * Decode QR from ImageData (Canvas / Browser)
  *
  * @param {ImageData} image
  * @returns {Promise<string>}
  */
-export async function qr_decode_from_image_data(image) {
+export async function decode(image) {
   await ensureInit();
-  return _qr_decode_from_rgba(image.width, image.height, image.data);
+  return _decode(image);
 }

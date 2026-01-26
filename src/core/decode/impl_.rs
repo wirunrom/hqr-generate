@@ -1,14 +1,13 @@
-#![cfg(feature = "decode")]
-
+use super::QrResult;
 use crate::error::DecodeError;
+
 use rqrr::PreparedImage;
 
-pub struct QrResult {
-    pub text: String,
-}
-
-/// Decode a QR code from an RGBA image buffer.
-pub fn decode_from_rgba(width: u32, height: u32, rgba: &[u8]) -> Result<QrResult, DecodeError> {
+pub(super) fn decode_from_rgba(
+    width: u32,
+    height: u32,
+    rgba: &[u8],
+) -> Result<QrResult, DecodeError> {
     let expected_len = (width * height * 4) as usize;
     if rgba.len() != expected_len {
         return Err(DecodeError::InvalidImage);
@@ -36,8 +35,7 @@ pub fn decode_from_rgba(width: u32, height: u32, rgba: &[u8]) -> Result<QrResult
     Err(DecodeError::NotFound)
 }
 
-/// Decode a QR code from encoded image bytes (PNG, JPEG, etc).
-pub fn decode_from_bytes(bytes: &[u8]) -> Result<QrResult, DecodeError> {
+pub(super) fn decode_from_bytes(bytes: &[u8]) -> Result<QrResult, DecodeError> {
     let img = image::load_from_memory(bytes).map_err(|_| DecodeError::InvalidImage)?;
 
     let rgba = img.to_rgba8();

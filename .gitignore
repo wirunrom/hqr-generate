@@ -1,5 +1,6 @@
 /target
 /pkg
 /tests/*
+/node_modules
 
 .npmrc.github

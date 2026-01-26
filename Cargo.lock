@@ -421,7 +421,7 @@ dependencies = [
 
 [[package]]
 name = "hqr-generate"
-version = "0.3.11"
+version = "0.4.0"
 dependencies = [
  "base64",
  "image",

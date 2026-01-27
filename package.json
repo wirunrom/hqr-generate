@@ -59,7 +59,7 @@
     "build": "npm run build:web && npm run build:bundler && npm run build:node && npm run build:react",
     "prepack": "npm run clean && npm run build && rm -f pkg/**/README.md pkg/**/LICENSE pkg/**/package.json",
     "release:test": "npm version prerelease --preid=next && npm run publish:test",
-    "publish:test": "npm publish --tag next --access public",
+    "publish:test": "npm publish --tag next --registry=https://registry.npmjs.org --access public",
     "publish:npm": "npm publish --registry=https://registry.npmjs.org --access public",
     "publish:github": "npm publish --registry=https://npm.pkg.github.com --userconfig .npmrc.github --access public"
   },

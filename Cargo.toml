@@ -13,16 +13,14 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 default = ["generate"]
-render-image = ["dep:image"]
 
 generate = []
 decode = ["dep:image", "dep:rqrr"]
-wasm = ["dep:wasm-bindgen", "dep:js-sys", "dep:base64"]
+wasm = ["dep:wasm-bindgen", "dep:js-sys"]
 
 [dependencies]
 wasm-bindgen = { version = "0.2", optional = true }
 js-sys       = { version = "0.3", optional = true }
-base64       = { version = "0.22", optional = true }
 qrcode = "0.14"
 png    = "0.17"
 image = { version = "0.25", optional = true }

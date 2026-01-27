@@ -45,28 +45,6 @@ pub fn generate_svg(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Strin
     Ok(render_svg(&bitmap))
 }
 
-// ---------- generate (jpg/webp) ----------
-
-#[cfg(feature = "render-image")]
-#[wasm_bindgen]
-pub fn generate_jpg(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Uint8Array, JsValue> {
-    use crate::render::jpg::render_jpg;
-
-    let bitmap = generate_qr_bitmap(text, size, margin, ecc).map_err(js_err)?;
-    let bytes = render_jpg(&bitmap).map_err(js_err)?;
-    Ok(Uint8Array::from(bytes.as_slice()))
-}
-
-#[cfg(feature = "render-image")]
-#[wasm_bindgen]
-pub fn generate_webp(text: &str, size: u32, margin: u32, ecc: u8) -> Result<Uint8Array, JsValue> {
-    use crate::render::webp::render_webp;
-
-    let bitmap = generate_qr_bitmap(text, size, margin, ecc).map_err(js_err)?;
-    let bytes = render_webp(&bitmap).map_err(js_err)?;
-    Ok(Uint8Array::from(bytes.as_slice()))
-}
-
 // ---------- decode (Uint8Array | ImageData) ----------
 // JS side:
 //   decode(u8arrayBytes)

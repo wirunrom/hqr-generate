@@ -11,12 +11,6 @@ pub use core::generate::generate_qr_bitmap;
 pub use render::png::render_png;
 pub use render::svg::render_svg;
 
-#[cfg(feature = "render-image")]
-pub use render::jpg::render_jpg;
-
-#[cfg(feature = "render-image")]
-pub use render::webp::render_webp;
-
 #[cfg(feature = "decode")]
 pub use core::decode;
 

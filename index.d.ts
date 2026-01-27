@@ -52,22 +52,6 @@ export function generate_svg(
   opts?: GenerateOptions
 ): Promise<string> | string;
 
-/**
- * Generate QR code as JPG
- */
-export function generate_jpg(
-  text: string,
-  opts?: GenerateOptions
-): Promise<Uint8Array> | Uint8Array;
-
-/**
- * Generate QR code as WebP
- */
-export function generate_webp(
-  text: string,
-  opts?: GenerateOptions
-): Promise<Uint8Array> | Uint8Array;
-
 /* =========================================================
  * Decode
  * ======================================================= */

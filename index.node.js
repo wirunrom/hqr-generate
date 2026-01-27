@@ -24,20 +24,6 @@ export function generate_svg(text, opts) {
 }
 
 /**
- * Generate QR as JPG
- */
-export function generate_jpg(text, opts) {
-  return core.generate_jpg(text, opts);
-}
-
-/**
- * Generate QR as WebP
- */
-export function generate_webp(text, opts) {
-  return core.generate_webp(text, opts);
-}
-
-/**
  * Decode QR
  *
  * @param {Uint8Array | ImageData} input

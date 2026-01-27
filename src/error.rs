@@ -2,9 +2,6 @@
 pub enum GenerateError {
     Qr(String),
     Png(String),
-
-    #[cfg(feature = "render-image")]
-    Image(String),
 }
 
 #[cfg(feature = "decode")]

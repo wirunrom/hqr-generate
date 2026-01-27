@@ -67,12 +67,21 @@
     "qrcode",
     "qr",
     "qr-decode",
-    "qr-scanner",
     "rust",
     "wasm",
+    "webassembly",
     "react",
+    "nextjs",
+    "ssr",
+    "browser",
+    "vanilla-js",
     "png",
-    "performance"
+    "svg",
+    "uint8array",
+    "binary",
+    "blob",
+    "performance",
+    "scan-reliability"
   ],
   "devDependencies": {
     "@types/react": "^19.2.9",

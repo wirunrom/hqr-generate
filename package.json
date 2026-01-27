@@ -10,13 +10,12 @@
   },
   "homepage": "https://github.com/wirunrom/hqr-generate#readme",
   "files": [
-    "pkg/**/hqr_generate*.js",
-    "pkg/**/hqr_generate*.wasm",
-    "pkg/**/hqr_generate*.d.ts",
+    "pkg/**",
     "index.node.js",
     "index.web.js",
     "index.bundler.js",
     "index.d.ts",
+    "index.web.d.ts",
     "react/**",
     "LICENSE",
     "README.md"

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { decode } from "../index";
+import { decode } from "../index.web.js";
 
-export function useDecode(input?: Uint8Array | ImageData) {
+export function useDecode(input?: ImageData) {
   const [text, setText] = useState<string | null>(null);
   const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { generate } from "../index";
+import { generate } from "../index.web.js";
 import type { GenerateOptions } from "../index";
 
 function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {

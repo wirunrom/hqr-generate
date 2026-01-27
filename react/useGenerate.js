@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { generate } from "../index";
+import { generate } from "../index.web.js";
 function toArrayBuffer(bytes) {
     if (bytes.buffer instanceof ArrayBuffer) {
         return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);

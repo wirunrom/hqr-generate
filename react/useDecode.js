@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { decode } from "../index";
+import { decode } from "../index.web.js";
 export function useDecode(input) {
     const [text, setText] = useState(null);
     const [error, setError] = useState(null);

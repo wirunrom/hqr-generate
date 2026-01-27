@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { generate_svg } from "../index";
+import { generate_svg } from "../index.web.js";
 import type { GenerateOptions } from "../index";
 
 export function useGenerateSvg(

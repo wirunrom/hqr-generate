@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { generate_svg } from "../index";
+import { generate_svg } from "../index.web.js";
 export function useGenerateSvg(text, opts) {
     const [svg, setSvg] = useState(null);
     const [error, setError] = useState(null);

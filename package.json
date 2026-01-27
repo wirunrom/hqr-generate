@@ -56,7 +56,7 @@
     "build:bundler": "wasm-pack build --target bundler --out-dir pkg/bundler -- --features wasm,decode",
     "build:node": "wasm-pack build --target nodejs --out-dir pkg/nodejs -- --features wasm,decode",
     "build": "npm run build:web && npm run build:bundler && npm run build:node && npm run build:react",
-    "prepack": "npm run clean && npm run build && rm -f pkg/**/README.md pkg/**/LICENSE pkg/**/package.json",
+    "prepare": "npm run clean && npm run build && rm -f pkg/**/README.md pkg/**/LICENSE pkg/**/package.json pkg/**/.gitignore",
     "release:test": "npm version prerelease --preid=next && npm run publish:test",
     "publish:test": "npm publish --tag next --registry=https://registry.npmjs.org --access public",
     "publish:npm": "npm publish --registry=https://registry.npmjs.org --access public",

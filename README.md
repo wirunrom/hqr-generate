@@ -178,6 +178,79 @@ export default function ClientQr({ bytes }: { bytes: Uint8Array }) {
 
 ---
 
+## Decode QR Code (Client-side)
+
+To decode a QR code in the browser,
+use the `useDecode` hook from the `/react` entry.
+
+> ⚠️ `useDecode` accepts **ImageData only**
+> If you have PNG bytes or an image URL, convert them to `ImageData` first using Canvas APIs.
+
+### Example (decode from Canvas ImageData)
+
+```tsx
+"use client";
+
+import { useDecode } from "@wirunrom/hqr-generate/react";
+
+export default function DecodeQr({ imageData }: { imageData: ImageData }) {
+  const { text, loading, error } = useDecode(imageData);
+
+  if (loading) return <p>Decoding…</p>;
+  if (error) return <p>Failed to decode</p>;
+
+  return <p>Decoded text: {text}</p>;
+}
+```
+
+---
+
+## `useDecode` API Reference
+
+### Signature
+
+```ts
+function useDecode(input?: ImageData): {
+  text: string | null;
+  loading: boolean;
+  error: unknown | null;
+};
+```
+
+### Parameters
+
+| Name    | Type                   | Description                                                          |
+| ------- | ---------------------- | -------------------------------------------------------------------- |
+| `input` | `ImageData` (optional) | Image data containing a QR code. Decoding is skipped if `undefined`. |
+
+### Returns
+
+| Field     | Type              | Description                                   |
+| --------- | ----------------- | --------------------------------------------- |
+| `text`    | `string \| null`  | Decoded QR text, or `null` if not decoded yet |
+| `loading` | `boolean`         | `true` while decoding is in progress          |
+| `error`   | `unknown \| null` | Error object if decoding fails                |
+
+---
+
+### Design Notes
+
+- `useDecode` is **browser-only**
+- It does **not** perform:
+  - image loading
+  - network requests
+  - Base64 conversion
+
+- This keeps decoding:
+  - predictable
+  - side-effect free
+  - consistent with the binary-first core API
+
+If you have an image URL or PNG bytes,
+convert them to `ImageData` explicitly before calling `useDecode`.
+
+---
+
 ## Plain HTML / Vanilla JavaScript Usage
 
 The library can be used directly in **plain HTML** using ES Modules.

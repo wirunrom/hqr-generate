@@ -51,7 +51,11 @@ This design ensures:
 ## Installation
 
 ```bash
-npm install @wirunrom/hqr-generate
+npm i @wirunrom/hqr-generate
+# or
+yarn add @wirunrom/hqr-generate
+# or
+pnpm i @wirunrom/hqr-generate
 ```
 
 ## API Reference

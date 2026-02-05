@@ -21,7 +21,7 @@ async function ensureInit() {
  */
 export async function generate(text, opts) {
   await ensureInit();
-  return _generate_png(text, opts);
+  return _generate_png(text, opts.size, opts.margin, opts.ecc);
 }
 
 /**
@@ -29,7 +29,7 @@ export async function generate(text, opts) {
  */
 export async function generate_png(text, opts) {
   await ensureInit();
-  return _generate_png(text, opts);
+  return _generate_png(text, opts.size, opts.margin, opts.ecc);
 }
 
 /**
@@ -37,7 +37,7 @@ export async function generate_png(text, opts) {
  */
 export async function generate_svg(text, opts) {
   await ensureInit();
-  return _generate_svg(text, opts);
+  return _generate_svg(text, opts.size, opts.margin, opts.ecc);
 }
 
 /**

@@ -26,9 +26,8 @@ pub fn generate_qr_bitmap(
         .map_err(|e| GenerateError::Qr(e.to_string()))?;
 
     let modules = code.width() as u32;
-    let total_modules = modules + margin * 2;
-    let scale = (size / total_modules).max(1);
-    let img_size = total_modules * scale;
+    let scale = (size / modules).max(1);
+    let img_size = (modules + margin * 2) * scale;
 
     let mut pixels = vec![255u8; (img_size * img_size) as usize];
 

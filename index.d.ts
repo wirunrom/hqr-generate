@@ -33,7 +33,7 @@ export interface GenerateOptions {
  */
 export function generate(
   text: string,
-  opts?: GenerateOptions
+  opts?: GenerateOptions,
 ): Promise<Uint8Array> | Uint8Array;
 
 /**
@@ -41,7 +41,7 @@ export function generate(
  */
 export function generate_png(
   text: string,
-  opts?: GenerateOptions
+  opts?: GenerateOptions,
 ): Promise<Uint8Array> | Uint8Array;
 
 /**
@@ -49,7 +49,7 @@ export function generate_png(
  */
 export function generate_svg(
   text: string,
-  opts?: GenerateOptions
+  opts?: GenerateOptions,
 ): Promise<string> | string;
 
 /* =========================================================
@@ -63,6 +63,4 @@ export function generate_svg(
  * - Uint8Array (PNG / JPG / WebP / etc.)
  * - ImageData (Browser / Canvas)
  */
-export function decode(
-  input: Uint8Array | ImageData
-): Promise<string> | string;
+export function decode(input: Uint8Array | ImageData): Promise<string> | string;
